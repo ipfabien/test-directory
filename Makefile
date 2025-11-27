@@ -6,7 +6,9 @@ LASTNAME ?= Doe
 EMAIL ?= john.doe@example.com
 PHONE ?= +33123456789
 
-.PHONY: up down build install update migrate serve call-create-contact
+CONTACT_ID ?= 00000000-0000-0000-0000-000000000001
+
+.PHONY: up down build install update migrate serve call-create-contact call-get-contact
 
 up:
 	$(DOCKER_COMPOSE) up -d
@@ -33,3 +35,6 @@ call-create-contact:
 	curl -i -X POST "$(API_BASE_URL)/api/contact" \
 		-H "Content-Type: application/json" \
 		-d "{\"firstname\":\"$(FIRSTNAME)\",\"lastname\":\"$(LASTNAME)\",\"email\":\"$(EMAIL)\",\"phone\":\"$(PHONE)\"}"
+
+call-get-contact:
+	curl -i -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)"

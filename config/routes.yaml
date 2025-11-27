@@ -2,3 +2,8 @@ api_create_contact:
   path: /api/contact
   controller: App\Controller\Api\CreateContactController
   methods: [POST]
+
+api_get_contact:
+  path: /api/contact/{id}
+  controller: App\Controller\Api\GetContactController
+  methods: [GET]

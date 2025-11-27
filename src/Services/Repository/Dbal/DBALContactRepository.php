@@ -6,6 +6,8 @@ namespace App\Services\Repository\Dbal;
 
 use App\Domain\Contact\ContactRepository;
 use App\Domain\Contact\CreateContact;
+use App\Domain\Contact\Contact;
+use App\Domain\Contact\Exception\ContactNotFound;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Uid\Uuid;
 
@@ -38,6 +40,26 @@ final class DBALContactRepository implements ContactRepository
         );
 
         return $externalId;
+    }
+
+    public function find(string $externalId): Contact
+    {
+        $row = $this->connection->fetchAssociative(
+            'SELECT external_id, firstname, lastname, email, phone FROM contact WHERE external_id = :external_id',
+            ['external_id' => $externalId]
+        );
+
+        if ($row === false) {
+            throw ContactNotFound::forExternalId($externalId);
+        }
+
+        return Contact::create(
+            (string) $row['external_id'],
+            (string) $row['firstname'],
+            (string) $row['lastname'],
+            (string) $row['email'],
+            $row['phone'] !== null ? (string) $row['phone'] : null
+        );
     }
 }
 

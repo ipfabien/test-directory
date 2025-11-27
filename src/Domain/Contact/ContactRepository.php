@@ -7,6 +7,8 @@ namespace App\Domain\Contact;
 interface ContactRepository
 {
     public function create(CreateContact $contact): string;
+
+    public function find(string $externalId): Contact;
 }
 
 
