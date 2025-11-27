@@ -8,29 +8,41 @@ use App\Domain\Contact\ContactRepository;
 use App\Domain\Contact\CreateContact;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CreateContactController
 {
     private ContactRepository $contactRepository;
 
-    public function __construct(ContactRepository $contactRepository)
+    private UrlGeneratorInterface $urlGenerator;
+
+    public function __construct(ContactRepository $contactRepository, UrlGeneratorInterface $urlGenerator)
     {
         $this->contactRepository = $contactRepository;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function __invoke(CreateContactRequest $request): JsonResponse
     {
-        $createContact = CreateContact::create(
-            $request->firstname(),
-            $request->lastname(),
-            $request->email(),
-            $request->phone()
+        $externalId = $this->contactRepository->create(
+            CreateContact::create(
+                $request->firstname(),
+                $request->lastname(),
+                $request->email(),
+                $request->phone()
+            )
         );
 
-        $this->contactRepository->create($createContact);
-
-        // For now we just return an empty JSON with HTTP 201.
-        return new JsonResponse([], Response::HTTP_CREATED);
+        return new JsonResponse(
+            [],
+            Response::HTTP_CREATED,
+            [
+                'Location' => $this->urlGenerator->generate(
+                    'api_get_contact',
+                    ['id' => $externalId]
+                )
+            ]
+        );
     }
 }
 
