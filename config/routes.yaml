@@ -1,3 +1,4 @@
-controllers:
-  resource: "../src/Controller/"
-  type: attribute
+api_create_contact:
+  path: /api/contact
+  controller: App\Controller\Api\CreateContactController
+  methods: [POST]

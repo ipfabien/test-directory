@@ -6,3 +6,7 @@ services:
   App\:
     resource: "../src/*"
     exclude: "../src/{DependencyInjection,Entity,Tests,Kernel.php}"
+
+  App\Services\Http\ArgumentResolver\JsonBodyNormalizableResolver:
+    tags:
+      - { name: controller.argument_value_resolver, priority: 100 }
