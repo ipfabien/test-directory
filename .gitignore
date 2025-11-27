@@ -1,0 +1,38 @@
+### Logs ###
+/var/
+/var/log/
+/var/cache/
+/var/sessions/
+
+### Symfony ###
+/vendor/
+/bin/
+/var/*
+!var/.gitignore
+
+### Environment files ###
+/.env.local
+/.env.*.local
+/.env.test.local
+/.env.dev.local.php
+
+### IDE ###
+/.idea/
+/.vscode/
+*.iml
+
+### OS ###
+.DS_Store
+Thumbs.db
+
+### Composer ###
+/composer.lock
+/composer.phar
+
+### Docker ###
+/docker/*.log
+
+### Documentation ###
+/.doc/
+
+
