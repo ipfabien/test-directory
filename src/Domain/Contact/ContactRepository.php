@@ -10,7 +10,7 @@ interface ContactRepository
 
     public function find(string $externalId): Contact;
 
-    public function search(): ContactList;
+    public function search(SearchFilter $filter): ContactList;
 }
 
 

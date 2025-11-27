@@ -9,7 +9,9 @@ use App\Domain\Contact\CreateContact;
 use App\Domain\Contact\Contact;
 use App\Domain\Contact\ContactList;
 use App\Domain\Contact\Exception\ContactNotFound;
+use App\Domain\Contact\SearchFilter;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\Uid\Uuid;
 
 final class DBALContactRepository implements ContactRepository
@@ -63,11 +65,15 @@ final class DBALContactRepository implements ContactRepository
         );
     }
 
-    public function search(): ContactList
+    public function search(SearchFilter $filter): ContactList
     {
-        $rows = $this->connection->fetchAllAssociative(
-            'SELECT external_id, firstname, lastname, email, phone FROM contact'
-        );
+        $qb = $this->connection->createQueryBuilder()
+            ->select('c.external_id', 'c.firstname', 'c.lastname', 'c.email', 'c.phone')
+            ->from('contact', 'c');
+
+        $this->applySearchFilter($qb, $filter);
+
+        $rows = $qb->executeQuery()->fetchAllAssociative();
 
         $contacts = [];
 
@@ -82,6 +88,33 @@ final class DBALContactRepository implements ContactRepository
         }
 
         return new ContactList(...$contacts);
+    }
+
+    private function applySearchFilter(QueryBuilder $qb, SearchFilter $filter): void
+    {
+        if (null !== $filter->firstname() && $filter->firstname() !== '') {
+            $qb
+                ->andWhere('c.firstname ILIKE :firstname')
+                ->setParameter('firstname', '%' . $filter->firstname() . '%');
+        }
+
+        if (null !== $filter->lastname() && $filter->lastname() !== '') {
+            $qb
+                ->andWhere('c.lastname ILIKE :lastname')
+                ->setParameter('lastname', '%' . $filter->lastname() . '%');
+        }
+
+        if (null !== $filter->email() && $filter->email() !== '') {
+            $qb
+                ->andWhere('c.email = :email')
+                ->setParameter('email', $filter->email());
+        }
+
+        if (null !== $filter->phone() && $filter->phone() !== '') {
+            $qb
+                ->andWhere('c.phone = :phone')
+                ->setParameter('phone', $filter->phone());
+        }
     }
 }
 

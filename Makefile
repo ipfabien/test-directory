@@ -40,4 +40,4 @@ call-get-contact:
 	curl -i -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)"
 
 call-get-contact-list:
-	curl -i -X GET "$(API_BASE_URL)/api/contacts"
+	curl -i -X GET "$(API_BASE_URL)/api/contacts?firstname=$(FIRSTNAME)&lastname=$(LASTNAME)&email=$(EMAIL)&phone=$(PHONE)"
