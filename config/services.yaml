@@ -3,10 +3,19 @@ services:
     autowire: true
     autoconfigure: true
 
+  # Controllers as services
+  App\Controller\:
+    resource: "../src/Controller/"
+    public: true
+    tags: ["controller.service_arguments"]
+
+  # Other services
   App\:
     resource: "../src/*"
-    exclude: "../src/{DependencyInjection,Entity,Tests,Kernel.php}"
+    exclude: "../src/{DependencyInjection,Entity,Tests,Kernel.php,Controller}"
 
   App\Services\Http\ArgumentResolver\JsonBodyNormalizableResolver:
     tags:
       - { name: controller.argument_value_resolver, priority: 100 }
+
+  App\Domain\Contact\ContactRepository: '@App\Services\Repository\Dbal\DBALContactRepository'

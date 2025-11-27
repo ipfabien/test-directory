@@ -16,6 +16,7 @@
         "symfony/dotenv": "5.4.*",
         "symfony/console": "5.4.*",
         "symfony/yaml": "5.4.*",
+        "symfony/uid": "5.4.*",
         "doctrine/dbal": "^3.0",
         "doctrine/migrations": "^3.0",
         "doctrine/doctrine-bundle": "^2.7",
