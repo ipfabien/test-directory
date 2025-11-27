@@ -1,6 +1,6 @@
 DOCKER_COMPOSE ?= docker compose
 
-.PHONY: up down build install update
+.PHONY: up down build install update migrate
 
 up:
 	$(DOCKER_COMPOSE) up -d
@@ -17,4 +17,6 @@ install:
 update:
 	$(DOCKER_COMPOSE) run --rm app composer update
 
+migrate:
+	$(DOCKER_COMPOSE) run --rm app php bin/console doctrine:migrations:migrate --no-interaction
 
