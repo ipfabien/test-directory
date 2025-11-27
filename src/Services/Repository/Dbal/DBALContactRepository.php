@@ -10,6 +10,7 @@ use App\Domain\Contact\Contact;
 use App\Domain\Contact\ContactList;
 use App\Domain\Contact\Exception\ContactNotFound;
 use App\Domain\Contact\SearchFilter;
+use App\Domain\Shared\Pagination;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\Uid\Uuid;
@@ -65,13 +66,17 @@ final class DBALContactRepository implements ContactRepository
         );
     }
 
-    public function search(SearchFilter $filter): ContactList
+    public function search(SearchFilter $filter, Pagination $pagination): ContactList
     {
         $qb = $this->connection->createQueryBuilder()
             ->select('c.external_id', 'c.firstname', 'c.lastname', 'c.email', 'c.phone')
             ->from('contact', 'c');
 
         $this->applySearchFilter($qb, $filter);
+
+        $qb
+            ->setFirstResult($pagination->offset())
+            ->setMaxResults($pagination->perPage());
 
         $rows = $qb->executeQuery()->fetchAllAssociative();
 

@@ -7,6 +7,8 @@ EMAIL ?= john.doe@example.com
 PHONE ?= +33123456789
 
 CONTACT_ID ?= 00000000-0000-0000-0000-000000000001
+PAGE ?= 1
+PER_PAGE ?= 20
 
 .PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list
 
@@ -40,4 +42,4 @@ call-get-contact:
 	curl -i -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)"
 
 call-get-contact-list:
-	curl -i -X GET "$(API_BASE_URL)/api/contacts?firstname=$(FIRSTNAME)&lastname=$(LASTNAME)&email=$(EMAIL)&phone=$(PHONE)"
+	curl -i -X GET "$(API_BASE_URL)/api/contacts?firstname=$(FIRSTNAME)&lastname=$(LASTNAME)&email=$(EMAIL)&phone=$(PHONE)&page=$(PAGE)&perPage=$(PER_PAGE)"

@@ -11,7 +11,7 @@ use App\Shared\Normalization\Normalizable;
  *
  * @implements \IteratorAggregate<int, Contact>
  */
-final class ContactList implements \IteratorAggregate, Normalizable
+final class ContactList implements \IteratorAggregate, \Countable, Normalizable
 {
     /**
      * @var Contact[]
@@ -29,6 +29,11 @@ final class ContactList implements \IteratorAggregate, Normalizable
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->contacts);
+    }
+
+    public function count(): int
+    {
+        return \count($this->contacts);
     }
 
     /**
