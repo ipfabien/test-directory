@@ -34,11 +34,20 @@ try {
 }
 
 // Run Doctrine migrations once before the test suite to ensure schema is up to date in the test DB.
-$command = 'php bin/console doctrine:migrations:migrate --no-interaction';
+// We try a relative path first (works both locally and in CI), and fall back to an absolute path from this file.
+$consolePath = 'bin/console';
+if (!file_exists($consolePath)) {
+    $consolePath = __DIR__ . '/../bin/console';
+}
+
+$command = sprintf('php %s doctrine:migrations:migrate --no-interaction', escapeshellarg($consolePath));
 exec($command, $output, $exitCode);
 
 if ($exitCode !== 0) {
     fwrite(STDERR, "Doctrine migrations failed with exit code {$exitCode}\n");
+    if (!empty($output)) {
+        fwrite(STDERR, implode(PHP_EOL, $output) . PHP_EOL);
+    }
     exit($exitCode);
 }
 

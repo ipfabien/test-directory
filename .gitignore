@@ -6,7 +6,6 @@
 
 ### Symfony ###
 /vendor/
-/bin/
 /var/*
 !var/.gitignore
 
@@ -40,6 +39,7 @@ Thumbs.db
 
 ### Tools ###
 /.php-cs-fixer.cache
+/\.phpunit.result.cache
 
 
 
