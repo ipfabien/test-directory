@@ -5,6 +5,7 @@ FIRSTNAME ?= John
 LASTNAME ?= Doe
 EMAIL ?= john.doe@example.com
 PHONE ?= +33123456789
+NOTE ?=
 
 CONTACT_ID ?= 00000000-0000-0000-0000-000000000001
 PAGE ?= 1
@@ -36,7 +37,7 @@ serve:
 call-create-contact:
 	curl -i -X POST "$(API_BASE_URL)/api/contact" \
 		-H "Content-Type: application/json" \
-		-d "{\"firstname\":\"$(FIRSTNAME)\",\"lastname\":\"$(LASTNAME)\",\"email\":\"$(EMAIL)\",\"phone\":\"$(PHONE)\"}"
+		-d "{\"firstname\":\"$(FIRSTNAME)\",\"lastname\":\"$(LASTNAME)\",\"email\":\"$(EMAIL)\",\"phone\":\"$(PHONE)\",\"note\":\"$(NOTE)\"}"
 
 call-get-contact:
 	curl -i -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)"

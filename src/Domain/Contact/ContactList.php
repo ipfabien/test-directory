@@ -7,24 +7,24 @@ namespace App\Domain\Contact;
 use App\Shared\Normalization\Normalizable;
 
 /**
- * Value object representing a collection of contacts.
+ * Value object representing a collection of contact summaries.
  *
- * @implements \IteratorAggregate<int, Contact>
+ * @implements \IteratorAggregate<int, ContactSummary>
  */
 final class ContactList implements \IteratorAggregate, \Countable, Normalizable
 {
     /**
-     * @var Contact[]
+     * @var ContactSummary[]
      */
     private array $contacts;
 
-    public function __construct(Contact ...$contacts)
+    public function __construct(ContactSummary ...$contacts)
     {
         $this->contacts = $contacts;
     }
 
     /**
-     * @return \Traversable<int, Contact>
+     * @return \Traversable<int, ContactSummary>
      */
     public function getIterator(): \Traversable
     {
@@ -48,7 +48,7 @@ final class ContactList implements \IteratorAggregate, \Countable, Normalizable
                 continue;
             }
 
-            $contacts[] = Contact::denormalize($item);
+            $contacts[] = ContactSummary::denormalize($item);
         }
 
         return new self(...$contacts);
@@ -60,7 +60,7 @@ final class ContactList implements \IteratorAggregate, \Countable, Normalizable
     public function normalize(): array
     {
         return array_map(
-            static function (Contact $contact): array {
+            static function (ContactSummary $contact): array {
                 return $contact->normalize();
             },
             $this->contacts

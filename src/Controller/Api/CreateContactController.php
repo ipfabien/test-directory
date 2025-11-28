@@ -29,7 +29,8 @@ final class CreateContactController
                 $request->firstname(),
                 $request->lastname(),
                 $request->email(),
-                $request->phone()
+                $request->phone(),
+                $request->note()
             )
         );
 

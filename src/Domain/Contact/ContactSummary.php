@@ -8,9 +8,9 @@ use App\Domain\Shared\ExternalId;
 use App\Shared\Normalization\Normalizable;
 
 /**
- * Value object representing a contact in the domain.
+ * Value object representing a lightweight view of a contact (without note, manager, etc.).
  */
-final class Contact implements Normalizable
+final class ContactSummary implements Normalizable
 {
     private ExternalId $externalId;
 
@@ -22,22 +22,18 @@ final class Contact implements Normalizable
 
     private ?string $phone;
 
-    private ?string $note;
-
-    private function __construct(
+    public function __construct(
         ExternalId $externalId,
         string $firstname,
         string $lastname,
         string $email,
-        ?string $phone,
-        ?string $note = null
+        ?string $phone
     ) {
         $this->externalId = $externalId;
         $this->firstname  = $firstname;
         $this->lastname   = $lastname;
         $this->email      = $email;
         $this->phone      = $phone;
-        $this->note       = $note;
     }
 
     public static function create(
@@ -45,10 +41,9 @@ final class Contact implements Normalizable
         string $firstname,
         string $lastname,
         string $email,
-        ?string $phone,
-        ?string $note = null
+        ?string $phone
     ): self {
-        return new self($externalId, $firstname, $lastname, $email, $phone, $note);
+        return new self($externalId, $firstname, $lastname, $email, $phone);
     }
 
     public function externalId(): ExternalId
@@ -76,11 +71,6 @@ final class Contact implements Normalizable
         return $this->phone;
     }
 
-    public function note(): ?string
-    {
-        return $this->note;
-    }
-
     /**
      * @param array<mixed> $data
      */
@@ -91,8 +81,7 @@ final class Contact implements Normalizable
             (string) ($data['firstname'] ?? ''),
             (string) ($data['lastname'] ?? ''),
             (string) ($data['email'] ?? ''),
-            isset($data['phone']) ? (string) $data['phone'] : null,
-            isset($data['note']) ? (string) $data['note'] : null
+            isset($data['phone']) ? (string) $data['phone'] : null
         );
     }
 
@@ -107,7 +96,6 @@ final class Contact implements Normalizable
             'lastname'   => $this->lastname,
             'email'      => $this->email,
             'phone'      => $this->phone,
-            'note'       => $this->note,
         ];
     }
 }

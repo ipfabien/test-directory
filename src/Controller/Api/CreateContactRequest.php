@@ -19,16 +19,20 @@ final class CreateContactRequest implements Normalizable
 
     private ?string $phone;
 
+    private ?string $note;
+
     public function __construct(
         string $firstname,
         string $lastname,
         string $email,
-        ?string $phone = null
+        ?string $phone = null,
+        ?string $note = null
     ) {
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->email     = $email;
         $this->phone     = $phone;
+        $this->note      = $note;
     }
 
     public function firstname(): string
@@ -51,6 +55,11 @@ final class CreateContactRequest implements Normalizable
         return $this->phone;
     }
 
+    public function note(): ?string
+    {
+        return $this->note;
+    }
+
     /**
      * @param array<mixed> $data
      */
@@ -60,7 +69,8 @@ final class CreateContactRequest implements Normalizable
             $data['firstname'] ?? '',
             $data['lastname']  ?? '',
             $data['email']     ?? '',
-            $data['phone']     ?? null
+            $data['phone']     ?? null,
+            $data['note']      ?? null
         );
     }
 
@@ -74,6 +84,7 @@ final class CreateContactRequest implements Normalizable
             'lastname'  => $this->lastname,
             'email'     => $this->email,
             'phone'     => $this->phone,
+            'note'      => $this->note,
         ];
     }
 }

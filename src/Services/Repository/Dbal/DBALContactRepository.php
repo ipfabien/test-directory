@@ -7,6 +7,7 @@ namespace App\Services\Repository\Dbal;
 use App\Domain\Contact\Contact;
 use App\Domain\Contact\ContactList;
 use App\Domain\Contact\ContactRepository;
+use App\Domain\Contact\ContactSummary;
 use App\Domain\Contact\CreateContact;
 use App\Domain\Contact\SearchFilter;
 use App\Domain\Shared\ExternalId;
@@ -38,14 +39,15 @@ final class DBALContactRepository implements ContactRepository
 
         try {
             $this->connection->executeStatement(
-                'INSERT INTO contact (external_id, firstname, lastname, email, phone, created_at, updated_at) 
-                 VALUES (:external_id, :firstname, :lastname, :email, :phone, :created_at, :updated_at)',
+                'INSERT INTO contact (external_id, firstname, lastname, email, phone, note, created_at, updated_at) 
+                 VALUES (:external_id, :firstname, :lastname, :email, :phone, :note, :created_at, :updated_at)',
                 [
                     'external_id' => $externalId->toString(),
                     'firstname'   => $contact->firstname(),
                     'lastname'    => $contact->lastname(),
                     'email'       => $contact->email(),
                     'phone'       => $contact->phone(),
+                    'note'        => $contact->note(),
                     'created_at'  => $now->format('Y-m-d H:i:s'),
                     'updated_at'  => $now->format('Y-m-d H:i:s'),
                 ]
@@ -66,7 +68,7 @@ final class DBALContactRepository implements ContactRepository
     {
         try {
             $row = $this->connection->fetchAssociative(
-                'SELECT external_id, firstname, lastname, email, phone FROM contact WHERE external_id = :external_id',
+                'SELECT external_id, firstname, lastname, email, phone, note FROM contact WHERE external_id = :external_id',
                 ['external_id' => $externalId->toString()]
             );
         } catch (\Throwable $exception) {
@@ -82,7 +84,8 @@ final class DBALContactRepository implements ContactRepository
             (string) $row['firstname'],
             (string) $row['lastname'],
             (string) $row['email'],
-            $row['phone'] !== null ? (string) $row['phone'] : null
+            $row['phone'] !== null ? (string) $row['phone'] : null,
+            isset($row['note']) ? (string) $row['note'] : null
         );
     }
 
@@ -110,7 +113,7 @@ final class DBALContactRepository implements ContactRepository
         $contacts = [];
 
         foreach ($rows as $row) {
-            $contacts[] = Contact::create(
+            $contacts[] = ContactSummary::create(
                 ExternalId::fromString((string) $row['external_id']),
                 (string) $row['firstname'],
                 (string) $row['lastname'],

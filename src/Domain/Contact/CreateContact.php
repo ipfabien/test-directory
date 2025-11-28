@@ -19,16 +19,20 @@ final class CreateContact
 
     private ?string $phone;
 
+    private ?string $note;
+
     private function __construct(
         string $firstname,
         string $lastname,
         string $email,
-        ?string $phone = null
+        ?string $phone = null,
+        ?string $note = null
     ) {
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->email     = $email;
         $this->phone     = $phone;
+        $this->note      = $note;
     }
 
     /**
@@ -38,7 +42,8 @@ final class CreateContact
         string $firstname,
         string $lastname,
         string $email,
-        ?string $phone = null
+        ?string $phone = null,
+        ?string $note = null
     ): self {
         Assert::stringNotEmpty($firstname, 'Firstname should not be empty.');
         Assert::maxLength($firstname, 100, 'Firstname is too long.');
@@ -55,7 +60,13 @@ final class CreateContact
             Assert::maxLength($phone, 32, 'Phone is too long.');
         }
 
-        return new self($firstname, $lastname, $email, $phone);
+        Assert::nullOrString($note);
+
+        if ($note !== null) {
+            Assert::maxLength($note, 2000, 'Note is too long.');
+        }
+
+        return new self($firstname, $lastname, $email, $phone, $note);
     }
 
     public function firstname(): string
@@ -76,5 +87,10 @@ final class CreateContact
     public function phone(): ?string
     {
         return $this->phone;
+    }
+
+    public function note(): ?string
+    {
+        return $this->note;
     }
 }
