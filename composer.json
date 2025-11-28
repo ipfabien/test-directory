@@ -17,11 +17,13 @@
         "symfony/console": "5.4.*",
         "symfony/yaml": "5.4.*",
         "symfony/uid": "5.4.*",
+        "symfony/security-bundle": "5.4.*",
         "doctrine/dbal": "^3.0",
         "doctrine/migrations": "^3.0",
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/doctrine-migrations-bundle": "^3.2",
-        "webmozart/assert": "^1.11"
+        "webmozart/assert": "^1.11",
+        "firebase/php-jwt": "^6.10"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.10",

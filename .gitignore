@@ -15,6 +15,9 @@
 /.env.*.local
 /.env.test.local
 /.env.dev.local.php
+/.env
+/.env.test
+/.env.dev
 
 ### IDE ###
 /.idea/

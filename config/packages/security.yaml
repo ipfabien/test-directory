@@ -1,0 +1,21 @@
+security:
+  enable_authenticator_manager: true
+
+  providers:
+    app_dummy_provider:
+      memory: null
+
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    main:
+      pattern: ^/api
+      stateless: true
+      provider: app_dummy_provider
+      custom_authenticators:
+        - App\Security\JwtAuthenticator
+
+  access_control:
+    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

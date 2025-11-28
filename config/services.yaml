@@ -29,3 +29,7 @@ services:
   App\Services\Http\EventSubscriber\ExceptionSubscriber:
     tags:
       - { name: kernel.event_subscriber }
+
+  App\Services\Security\JwtTokenService:
+    arguments:
+      $secret: "%env(JWT_SECRET)%"

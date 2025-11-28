@@ -7,6 +7,9 @@ EMAIL ?= john.doe@example.com
 PHONE ?= +33123456789
 NOTE ?=
 
+# Try to read API_TOKEN from .env so that curl commands don't require manual export.
+AUTH_TOKEN ?= $(shell sed -n 's/^API_TOKEN=\(.*\)/\1/p' .env)
+
 CONTACT_ID ?= 00000000-0000-0000-0000-000000000001
 MANAGER_ID ?= 11111111-1111-1111-1111-111111111111
 PAGE ?= 1
@@ -38,22 +41,23 @@ serve:
 call-create-contact:
 	curl -i -X POST "$(API_BASE_URL)/api/contact" \
 		-H "Content-Type: application/json" \
+		-H "Authorization: Bearer $(AUTH_TOKEN)" \
 		-d "{\"firstname\":\"$(FIRSTNAME)\",\"lastname\":\"$(LASTNAME)\",\"email\":\"$(EMAIL)\",\"phone\":\"$(PHONE)\",\"note\":\"$(NOTE)\",\"managerId\":\"$(MANAGER_ID)\"}"
 
 call-get-contact:
-	curl -i -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)"
+	curl -i -H "Authorization: Bearer $(AUTH_TOKEN)" -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)"
 
 call-get-contact-list:
-	curl -i -X GET "$(API_BASE_URL)/api/contacts?firstname=$(FIRSTNAME)&lastname=$(LASTNAME)&email=$(EMAIL)&phone=$(PHONE)&page=$(PAGE)&perPage=$(PER_PAGE)"
+	curl -i -H "Authorization: Bearer $(AUTH_TOKEN)" -X GET "$(API_BASE_URL)/api/contacts?firstname=$(FIRSTNAME)&lastname=$(LASTNAME)&email=$(EMAIL)&phone=$(PHONE)&page=$(PAGE)&perPage=$(PER_PAGE)"
 
 call-get-contact-manager:
-	curl -i -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)/manager"
+	curl -i -H "Authorization: Bearer $(AUTH_TOKEN)" -X GET "$(API_BASE_URL)/api/contact/$(CONTACT_ID)/manager"
 
 call-get-manager-list:
-	curl -i -X GET "$(API_BASE_URL)/api/managers"
+	curl -i -H "Authorization: Bearer $(AUTH_TOKEN)" -X GET "$(API_BASE_URL)/api/managers"
 
 call-get-manager:
-	curl -i -X GET "$(API_BASE_URL)/api/manager/$(MANAGER_ID)"
+	curl -i -H "Authorization: Bearer $(AUTH_TOKEN)" -X GET "$(API_BASE_URL)/api/manager/$(MANAGER_ID)"
 
 cs-fix:
 	$(DOCKER_COMPOSE) run --rm app php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php
@@ -63,3 +67,6 @@ phpstan:
 
 phpunit:
 	$(DOCKER_COMPOSE) run --rm app php vendor/bin/phpunit
+
+jwt:
+	$(DOCKER_COMPOSE) run --rm app php bin/console app:jwt:generate-test-token
