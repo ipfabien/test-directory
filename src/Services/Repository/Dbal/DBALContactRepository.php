@@ -41,7 +41,6 @@ final class DBALContactRepository implements ContactRepository
                 'INSERT INTO contact (external_id, firstname, lastname, email, phone, created_at, updated_at) 
                  VALUES (:external_id, :firstname, :lastname, :email, :phone, :created_at, :updated_at)',
                 [
-                    'external_id' => $externalId,
                     'external_id' => $externalId->toString(),
                     'firstname'   => $contact->firstname(),
                     'lastname'    => $contact->lastname(),

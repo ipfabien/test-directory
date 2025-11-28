@@ -34,6 +34,9 @@ final class QueryNormalizableResolver implements ArgumentValueResolverInterface
         return true;
     }
 
+    /**
+     * @return iterable<Normalizable>
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         $data = array_merge(

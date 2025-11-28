@@ -10,7 +10,7 @@ CONTACT_ID ?= 00000000-0000-0000-0000-000000000001
 PAGE ?= 1
 PER_PAGE ?= 20
 
-.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list cs-fix
+.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list cs-fix phpstan
 
 up:
 	$(DOCKER_COMPOSE) up -d
@@ -46,3 +46,6 @@ call-get-contact-list:
 
 cs-fix:
 	$(DOCKER_COMPOSE) run --rm app php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php
+
+phpstan:
+	$(DOCKER_COMPOSE) run --rm app php vendor/bin/phpstan analyse -c phpstan.neon

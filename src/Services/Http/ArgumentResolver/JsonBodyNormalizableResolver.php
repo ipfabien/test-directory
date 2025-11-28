@@ -42,17 +42,19 @@ final class JsonBodyNormalizableResolver implements ArgumentValueResolverInterfa
     }
 
     /**
+     * @return iterable<Normalizable>
+     *
      * @throws BadRequestException
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         $content = $request->getContent();
 
-        if ($content === '' || $content === null) {
+        if ($content === '') {
             $data = [];
         } else {
             try {
-                $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+                $data = json_decode((string) $content, true, 512, JSON_THROW_ON_ERROR);
             } catch (\JsonException $exception) {
                 throw new BadRequestException('Invalid JSON body.', $exception);
             }
