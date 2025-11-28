@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Contact;
 
 use App\Shared\Normalization\Normalizable;
 
@@ -18,11 +18,17 @@ final class GetContactRequest implements Normalizable
         $this->id = $id;
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function denormalize(array $data): self
     {
         return new self((string) ($data['id'] ?? ''));
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function normalize(): array
     {
         return [

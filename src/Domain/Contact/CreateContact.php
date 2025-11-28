@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Contact;
 
+use App\Domain\Shared\ExternalId;
 use Webmozart\Assert\Assert;
 
 /**
@@ -21,18 +22,22 @@ final class CreateContact
 
     private ?string $note;
 
+    private string $managerExternalId;
+
     private function __construct(
         string $firstname,
         string $lastname,
         string $email,
+        string $managerExternalId,
         ?string $phone = null,
         ?string $note = null
     ) {
-        $this->firstname = $firstname;
-        $this->lastname  = $lastname;
-        $this->email     = $email;
-        $this->phone     = $phone;
-        $this->note      = $note;
+        $this->firstname         = $firstname;
+        $this->lastname          = $lastname;
+        $this->email             = $email;
+        $this->phone             = $phone;
+        $this->note              = $note;
+        $this->managerExternalId = $managerExternalId;
     }
 
     /**
@@ -42,6 +47,7 @@ final class CreateContact
         string $firstname,
         string $lastname,
         string $email,
+        string $managerExternalId,
         ?string $phone = null,
         ?string $note = null
     ): self {
@@ -66,7 +72,12 @@ final class CreateContact
             Assert::maxLength($note, 2000, 'Note is too long.');
         }
 
-        return new self($firstname, $lastname, $email, $phone, $note);
+        Assert::stringNotEmpty($managerExternalId, 'Manager externalId should not be empty.');
+
+        // Validate UUID format through ExternalId VO.
+        ExternalId::fromString($managerExternalId);
+
+        return new self($firstname, $lastname, $email, $managerExternalId, $phone, $note);
     }
 
     public function firstname(): string
@@ -92,5 +103,10 @@ final class CreateContact
     public function note(): ?string
     {
         return $this->note;
+    }
+
+    public function managerExternalId(): string
+    {
+        return $this->managerExternalId;
     }
 }

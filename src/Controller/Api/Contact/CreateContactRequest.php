@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Contact;
 
 use App\Shared\Normalization\Normalizable;
 
@@ -21,16 +21,20 @@ final class CreateContactRequest implements Normalizable
 
     private ?string $note;
 
+    private string $managerId;
+
     public function __construct(
         string $firstname,
         string $lastname,
         string $email,
+        string $managerId,
         ?string $phone = null,
         ?string $note = null
     ) {
         $this->firstname = $firstname;
         $this->lastname  = $lastname;
         $this->email     = $email;
+        $this->managerId = $managerId;
         $this->phone     = $phone;
         $this->note      = $note;
     }
@@ -60,6 +64,11 @@ final class CreateContactRequest implements Normalizable
         return $this->note;
     }
 
+    public function managerId(): string
+    {
+        return $this->managerId;
+    }
+
     /**
      * @param array<mixed> $data
      */
@@ -69,8 +78,9 @@ final class CreateContactRequest implements Normalizable
             $data['firstname'] ?? '',
             $data['lastname']  ?? '',
             $data['email']     ?? '',
-            $data['phone']     ?? null,
-            $data['note']      ?? null
+            (string) ($data['managerId'] ?? ''),
+            $data['phone'] ?? null,
+            $data['note']  ?? null
         );
     }
 
@@ -85,6 +95,7 @@ final class CreateContactRequest implements Normalizable
             'email'     => $this->email,
             'phone'     => $this->phone,
             'note'      => $this->note,
+            'managerId' => $this->managerId,
         ];
     }
 }

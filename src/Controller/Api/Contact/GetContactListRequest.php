@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Contact;
 
 use App\Shared\Normalization\Normalizable;
 
@@ -39,6 +39,9 @@ final class GetContactListRequest implements Normalizable
         $this->perPage   = $perPage;
     }
 
+    /**
+     * @param array<mixed> $data
+     */
     public static function denormalize(array $data): self
     {
         return new self(
@@ -51,6 +54,9 @@ final class GetContactListRequest implements Normalizable
         );
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function normalize(): array
     {
         return [

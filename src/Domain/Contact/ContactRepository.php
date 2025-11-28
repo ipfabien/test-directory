@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Contact;
 
+use App\Domain\Manager\Manager;
 use App\Domain\Shared\ExternalId;
 use App\Domain\Shared\Pagination;
 use App\Shared\Exception\BadRequestException;
@@ -28,4 +29,17 @@ interface ContactRepository
      * @throws RuntimeException
      */
     public function search(SearchFilter $filter, Pagination $pagination): ContactList;
+
+    /**
+     * @throws RuntimeException
+     */
+    public function findByManager(ExternalId $managerExternalId): ContactList;
+
+    /**
+     * Returns the manager associated to a given contact.
+     *
+     * @throws NotFoundException
+     * @throws RuntimeException
+     */
+    public function findManagerForContact(ExternalId $externalId): Manager;
 }

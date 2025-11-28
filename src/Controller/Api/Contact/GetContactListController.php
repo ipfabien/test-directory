@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Api;
+namespace App\Controller\Api\Contact;
 
 use App\Domain\Contact\ContactRepository;
 use App\Domain\Contact\SearchFilter;

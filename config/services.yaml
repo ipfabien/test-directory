@@ -24,6 +24,8 @@ services:
 
   App\Domain\Contact\ContactRepository: '@App\Services\Repository\Dbal\DBALContactRepository'
 
+  App\Domain\Manager\ManagerRepository: '@App\Services\Repository\Dbal\DBALManagerRepository'
+
   App\Services\Http\EventSubscriber\ExceptionSubscriber:
     tags:
       - { name: kernel.event_subscriber }

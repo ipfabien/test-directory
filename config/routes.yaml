@@ -1,14 +1,29 @@
 api_create_contact:
   path: /api/contact
-  controller: App\Controller\Api\CreateContactController
+  controller: App\Controller\Api\Contact\CreateContactController
   methods: [POST]
 
 api_get_contact:
   path: /api/contact/{id}
-  controller: App\Controller\Api\GetContactController
+  controller: App\Controller\Api\Contact\GetContactController
+  methods: [GET]
+
+api_get_contact_manager:
+  path: /api/contact/{id}/manager
+  controller: App\Controller\Api\Contact\GetContactManagerController
   methods: [GET]
 
 api_get_contact_list:
   path: /api/contacts
-  controller: App\Controller\Api\GetContactListController
+  controller: App\Controller\Api\Contact\GetContactListController
+  methods: [GET]
+
+api_get_manager_list:
+  path: /api/managers
+  controller: App\Controller\Api\Manager\GetManagerListController
+  methods: [GET]
+
+api_get_manager:
+  path: /api/manager/{id}
+  controller: App\Controller\Api\Manager\GetManagerController
   methods: [GET]
