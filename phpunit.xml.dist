@@ -9,8 +9,11 @@
 >
     <php>
         <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="0"/>
         <!-- Dedicated test database name -->
         <env name="DB_NAME" value="contacts_test"/>
+        <!-- Explicit Kernel class for WebTestCase / KernelTestCase -->
+        <env name="KERNEL_CLASS" value="App\Kernel"/>
     </php>
     <testsuites>
         <testsuite name="Application Test Suite">
