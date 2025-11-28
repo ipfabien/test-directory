@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Http\ArgumentResolver;
 
+use App\Shared\Exception\BadRequestException;
 use App\Shared\Normalization\Normalizable;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * Resolves controller arguments implementing Normalizable from a JSON request body.
@@ -41,6 +41,9 @@ final class JsonBodyNormalizableResolver implements ArgumentValueResolverInterfa
         return true;
     }
 
+    /**
+     * @throws BadRequestException
+     */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
         $content = $request->getContent();
@@ -48,10 +51,14 @@ final class JsonBodyNormalizableResolver implements ArgumentValueResolverInterfa
         if ($content === '' || $content === null) {
             $data = [];
         } else {
-            $data = json_decode($content, true);
+            try {
+                $data = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
+            } catch (\JsonException $exception) {
+                throw new BadRequestException('Invalid JSON body.', $exception);
+            }
 
             if (!\is_array($data)) {
-                throw new BadRequestHttpException('Invalid JSON body.');
+                throw new BadRequestException('Invalid JSON body.');
             }
         }
 

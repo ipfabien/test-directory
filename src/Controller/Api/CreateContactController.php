@@ -6,6 +6,7 @@ namespace App\Controller\Api;
 
 use App\Domain\Contact\ContactRepository;
 use App\Domain\Contact\CreateContact;
+use App\Domain\Shared\ExternalId;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -39,7 +40,7 @@ final class CreateContactController
             [
                 'Location' => $this->urlGenerator->generate(
                     'api_get_contact',
-                    ['id' => $externalId]
+                    ['id' => $externalId->toString()]
                 )
             ]
         );

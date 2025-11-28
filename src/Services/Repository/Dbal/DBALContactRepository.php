@@ -8,10 +8,14 @@ use App\Domain\Contact\ContactRepository;
 use App\Domain\Contact\CreateContact;
 use App\Domain\Contact\Contact;
 use App\Domain\Contact\ContactList;
-use App\Domain\Contact\Exception\ContactNotFound;
 use App\Domain\Contact\SearchFilter;
+use App\Domain\Shared\ExternalId;
 use App\Domain\Shared\Pagination;
+use App\Shared\Exception\BadRequestException;
+use App\Shared\Exception\NotFoundException;
+use App\Shared\Exception\RuntimeException;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Symfony\Component\Uid\Uuid;
 
@@ -24,41 +28,58 @@ final class DBALContactRepository implements ContactRepository
         $this->connection = $connection;
     }
 
-    public function create(CreateContact $contact): string
+    /**
+     * @inheritDoc
+     */
+    public function create(CreateContact $contact): ExternalId
     {
-        $externalId = Uuid::v4()->toRfc4122();
+        $externalId = ExternalId::fromString(Uuid::v4()->toRfc4122());
         $now = new \DateTimeImmutable();
 
-        $this->connection->executeStatement(
-            'INSERT INTO contact (external_id, firstname, lastname, email, phone, created_at, updated_at) 
-             VALUES (:external_id, :firstname, :lastname, :email, :phone, :created_at, :updated_at)',
-            [
-                'external_id' => $externalId,
-                'firstname' => $contact->firstname(),
-                'lastname' => $contact->lastname(),
-                'email' => $contact->email(),
-                'phone' => $contact->phone(),
-                'created_at' => $now->format('Y-m-d H:i:s'),
-                'updated_at' => $now->format('Y-m-d H:i:s'),
-            ]
-        );
+        try {
+            $this->connection->executeStatement(
+                'INSERT INTO contact (external_id, firstname, lastname, email, phone, created_at, updated_at) 
+                 VALUES (:external_id, :firstname, :lastname, :email, :phone, :created_at, :updated_at)',
+                [
+                    'external_id' => $externalId,
+                    'external_id' => $externalId->toString(),
+                    'firstname' => $contact->firstname(),
+                    'lastname' => $contact->lastname(),
+                    'email' => $contact->email(),
+                    'phone' => $contact->phone(),
+                    'created_at' => $now->format('Y-m-d H:i:s'),
+                    'updated_at' => $now->format('Y-m-d H:i:s'),
+                ]
+            );
+        } catch (UniqueConstraintViolationException $exception) {
+            throw new BadRequestException('Contact with given email already exists.', $exception);
+        } catch (\Throwable $exception) {
+            throw new RuntimeException('Unable to create contact.', $exception);
+        }
 
         return $externalId;
     }
-
-    public function find(string $externalId): Contact
+    
+    /**
+     * @inheritDoc
+     */
+    public function find(ExternalId $externalId): Contact
     {
-        $row = $this->connection->fetchAssociative(
-            'SELECT external_id, firstname, lastname, email, phone FROM contact WHERE external_id = :external_id',
-            ['external_id' => $externalId]
-        );
+        try {
+            $row = $this->connection->fetchAssociative(
+                'SELECT external_id, firstname, lastname, email, phone FROM contact WHERE external_id = :external_id',
+                ['external_id' => $externalId->toString()]
+            );
+        } catch (\Throwable $exception) {
+            throw new RuntimeException('Unable to load contact.', $exception);
+        }
 
         if ($row === false) {
-            throw ContactNotFound::forExternalId($externalId);
+            throw new NotFoundException(sprintf('Contact with externalId "%s" not found.', $externalId->toString()));
         }
 
         return Contact::create(
-            (string) $row['external_id'],
+            ExternalId::fromString((string) $row['external_id']),
             (string) $row['firstname'],
             (string) $row['lastname'],
             (string) $row['email'],
@@ -66,6 +87,9 @@ final class DBALContactRepository implements ContactRepository
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     public function search(SearchFilter $filter, Pagination $pagination): ContactList
     {
         $qb = $this->connection->createQueryBuilder()
@@ -78,13 +102,17 @@ final class DBALContactRepository implements ContactRepository
             ->setFirstResult($pagination->offset())
             ->setMaxResults($pagination->perPage());
 
-        $rows = $qb->executeQuery()->fetchAllAssociative();
+        try {
+            $rows = $qb->executeQuery()->fetchAllAssociative();
+        } catch (\Throwable $exception) {
+            throw new RuntimeException('Unable to search contacts.', $exception);
+        }
 
         $contacts = [];
 
         foreach ($rows as $row) {
             $contacts[] = Contact::create(
-                (string) $row['external_id'],
+                ExternalId::fromString((string) $row['external_id']),
                 (string) $row['firstname'],
                 (string) $row['lastname'],
                 (string) $row['email'],

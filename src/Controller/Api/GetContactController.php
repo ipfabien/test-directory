@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Domain\Contact\ContactRepository;
-use App\Domain\Contact\Exception\ContactNotFound;
+use App\Domain\Shared\ExternalId;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,11 +20,9 @@ final class GetContactController
 
     public function __invoke(GetContactRequest $request): JsonResponse
     {
-        try {
-            $contact = $this->contactRepository->find($request->id());
-        } catch (ContactNotFound $exception) {
-            return new JsonResponse(['error' => 'Contact not found'], Response::HTTP_NOT_FOUND);
-        }
+        $contact = $this->contactRepository->find(
+            ExternalId::fromString($request->id())
+        );
 
         return new JsonResponse($contact->normalize(), Response::HTTP_OK);
     }

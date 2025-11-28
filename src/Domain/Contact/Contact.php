@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domain\Contact;
 
+use App\Domain\Shared\ExternalId;
 use App\Shared\Normalization\Normalizable;
 
 /**
@@ -11,7 +12,7 @@ use App\Shared\Normalization\Normalizable;
  */
 final class Contact implements Normalizable
 {
-    private string $externalId;
+    private ExternalId $externalId;
 
     private string $firstname;
 
@@ -22,7 +23,7 @@ final class Contact implements Normalizable
     private ?string $phone;
 
     private function __construct(
-        string $externalId,
+        ExternalId $externalId,
         string $firstname,
         string $lastname,
         string $email,
@@ -36,7 +37,7 @@ final class Contact implements Normalizable
     }
 
     public static function create(
-        string $externalId,
+        ExternalId $externalId,
         string $firstname,
         string $lastname,
         string $email,
@@ -45,7 +46,7 @@ final class Contact implements Normalizable
         return new self($externalId, $firstname, $lastname, $email, $phone);
     }
 
-    public function externalId(): string
+    public function externalId(): ExternalId
     {
         return $this->externalId;
     }
@@ -76,7 +77,7 @@ final class Contact implements Normalizable
     public static function denormalize(array $data): self
     {
         return new self(
-            (string) ($data['externalId'] ?? ''),
+            ExternalId::fromString((string) ($data['externalId'] ?? '')),
             (string) ($data['firstname'] ?? ''),
             (string) ($data['lastname'] ?? ''),
             (string) ($data['email'] ?? ''),
@@ -90,7 +91,7 @@ final class Contact implements Normalizable
     public function normalize(): array
     {
         return [
-            'externalId' => $this->externalId,
+            'externalId' => $this->externalId->toString(),
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
             'email' => $this->email,

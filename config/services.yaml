@@ -23,3 +23,7 @@ services:
       - { name: controller.argument_value_resolver, priority: 50 }
 
   App\Domain\Contact\ContactRepository: '@App\Services\Repository\Dbal\DBALContactRepository'
+
+  App\Services\Http\EventSubscriber\ExceptionSubscriber:
+    tags:
+      - { name: kernel.event_subscriber }
