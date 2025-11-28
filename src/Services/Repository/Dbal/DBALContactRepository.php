@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Services\Repository\Dbal;
 
-use App\Domain\Contact\ContactRepository;
-use App\Domain\Contact\CreateContact;
 use App\Domain\Contact\Contact;
 use App\Domain\Contact\ContactList;
+use App\Domain\Contact\ContactRepository;
+use App\Domain\Contact\CreateContact;
 use App\Domain\Contact\SearchFilter;
 use App\Domain\Shared\ExternalId;
 use App\Domain\Shared\Pagination;
@@ -34,7 +34,7 @@ final class DBALContactRepository implements ContactRepository
     public function create(CreateContact $contact): ExternalId
     {
         $externalId = ExternalId::fromString(Uuid::v4()->toRfc4122());
-        $now = new \DateTimeImmutable();
+        $now        = new \DateTimeImmutable();
 
         try {
             $this->connection->executeStatement(
@@ -43,12 +43,12 @@ final class DBALContactRepository implements ContactRepository
                 [
                     'external_id' => $externalId,
                     'external_id' => $externalId->toString(),
-                    'firstname' => $contact->firstname(),
-                    'lastname' => $contact->lastname(),
-                    'email' => $contact->email(),
-                    'phone' => $contact->phone(),
-                    'created_at' => $now->format('Y-m-d H:i:s'),
-                    'updated_at' => $now->format('Y-m-d H:i:s'),
+                    'firstname'   => $contact->firstname(),
+                    'lastname'    => $contact->lastname(),
+                    'email'       => $contact->email(),
+                    'phone'       => $contact->phone(),
+                    'created_at'  => $now->format('Y-m-d H:i:s'),
+                    'updated_at'  => $now->format('Y-m-d H:i:s'),
                 ]
             );
         } catch (UniqueConstraintViolationException $exception) {
@@ -59,7 +59,7 @@ final class DBALContactRepository implements ContactRepository
 
         return $externalId;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -150,5 +150,3 @@ final class DBALContactRepository implements ContactRepository
         }
     }
 }
-
-

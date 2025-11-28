@@ -68,5 +68,3 @@ final class JsonBodyNormalizableResolver implements ArgumentValueResolverInterfa
         yield $class::denormalize($data);
     }
 }
-
-

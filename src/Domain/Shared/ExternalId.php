@@ -35,5 +35,3 @@ final class ExternalId
         return $this->value === $other->value;
     }
 }
-
-

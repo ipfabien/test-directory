@@ -26,9 +26,9 @@ final class CreateContact
         ?string $phone = null
     ) {
         $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
-        $this->phone = $phone;
+        $this->lastname  = $lastname;
+        $this->email     = $email;
+        $this->phone     = $phone;
     }
 
     /**
@@ -50,6 +50,7 @@ final class CreateContact
         Assert::maxLength($email, 255, 'Email is too long.');
 
         Assert::nullOrString($phone);
+
         if ($phone !== null) {
             Assert::maxLength($phone, 32, 'Phone is too long.');
         }
@@ -77,5 +78,3 @@ final class CreateContact
         return $this->phone;
     }
 }
-
-

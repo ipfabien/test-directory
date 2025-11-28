@@ -32,11 +32,11 @@ final class GetContactListRequest implements Normalizable
         ?int $perPage
     ) {
         $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
-        $this->phone = $phone;
-        $this->page = $page;
-        $this->perPage = $perPage;
+        $this->lastname  = $lastname;
+        $this->email     = $email;
+        $this->phone     = $phone;
+        $this->page      = $page;
+        $this->perPage   = $perPage;
     }
 
     public static function denormalize(array $data): self
@@ -55,11 +55,11 @@ final class GetContactListRequest implements Normalizable
     {
         return [
             'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'page' => $this->page,
-            'perPage' => $this->perPage,
+            'lastname'  => $this->lastname,
+            'email'     => $this->email,
+            'phone'     => $this->phone,
+            'page'      => $this->page,
+            'perPage'   => $this->perPage,
         ];
     }
 
@@ -93,5 +93,3 @@ final class GetContactListRequest implements Normalizable
         return $this->perPage;
     }
 }
-
-

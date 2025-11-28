@@ -26,9 +26,9 @@ final class CreateContactRequest implements Normalizable
         ?string $phone = null
     ) {
         $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
-        $this->phone = $phone;
+        $this->lastname  = $lastname;
+        $this->email     = $email;
+        $this->phone     = $phone;
     }
 
     public function firstname(): string
@@ -58,9 +58,9 @@ final class CreateContactRequest implements Normalizable
     {
         return new self(
             $data['firstname'] ?? '',
-            $data['lastname'] ?? '',
-            $data['email'] ?? '',
-            $data['phone'] ?? null
+            $data['lastname']  ?? '',
+            $data['email']     ?? '',
+            $data['phone']     ?? null
         );
     }
 
@@ -71,10 +71,9 @@ final class CreateContactRequest implements Normalizable
     {
         return [
             'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'email' => $this->email,
-            'phone' => $this->phone,
+            'lastname'  => $this->lastname,
+            'email'     => $this->email,
+            'phone'     => $this->phone,
         ];
     }
 }
-

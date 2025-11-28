@@ -35,5 +35,3 @@ final class GetContactRequest implements Normalizable
         return $this->id;
     }
 }
-
-

@@ -47,5 +47,3 @@ final class ExceptionSubscriber implements EventSubscriberInterface
         return new JsonResponse(['error' => $message], $statusCode);
     }
 }
-
-

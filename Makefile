@@ -10,7 +10,7 @@ CONTACT_ID ?= 00000000-0000-0000-0000-000000000001
 PAGE ?= 1
 PER_PAGE ?= 20
 
-.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list
+.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list cs-fix
 
 up:
 	$(DOCKER_COMPOSE) up -d
@@ -43,3 +43,6 @@ call-get-contact:
 
 call-get-contact-list:
 	curl -i -X GET "$(API_BASE_URL)/api/contacts?firstname=$(FIRSTNAME)&lastname=$(LASTNAME)&email=$(EMAIL)&phone=$(PHONE)&page=$(PAGE)&perPage=$(PER_PAGE)"
+
+cs-fix:
+	$(DOCKER_COMPOSE) run --rm app php vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php

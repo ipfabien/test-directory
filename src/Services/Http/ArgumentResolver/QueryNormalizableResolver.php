@@ -47,5 +47,3 @@ final class QueryNormalizableResolver implements ArgumentValueResolverInterface
         yield $class::denormalize($data);
     }
 }
-
-

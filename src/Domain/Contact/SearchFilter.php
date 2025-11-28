@@ -21,9 +21,9 @@ final class SearchFilter
         ?string $phone
     ) {
         $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
-        $this->phone = $phone;
+        $this->lastname  = $lastname;
+        $this->email     = $email;
+        $this->phone     = $phone;
     }
 
     public static function create(
@@ -55,5 +55,3 @@ final class SearchFilter
         return $this->phone;
     }
 }
-
-

@@ -27,5 +27,3 @@ final class GetContactController
         return new JsonResponse($contact->normalize(), Response::HTTP_OK);
     }
 }
-
-

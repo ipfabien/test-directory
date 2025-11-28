@@ -12,13 +12,13 @@ final class Pagination
 
     private function __construct(int $page, int $perPage)
     {
-        $this->page = $page;
+        $this->page    = $page;
         $this->perPage = $perPage;
     }
 
     public static function create(?int $page, ?int $perPage): self
     {
-        $page = $page ?? 1;
+        $page    = $page    ?? 1;
         $perPage = $perPage ?? 20;
 
         if ($page < 1) {
@@ -51,5 +51,3 @@ final class Pagination
         return ($this->page - 1) * $this->perPage;
     }
 }
-
-

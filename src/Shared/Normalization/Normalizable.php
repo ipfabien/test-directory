@@ -16,5 +16,3 @@ interface Normalizable
      */
     public function normalize(): array;
 }
-
-

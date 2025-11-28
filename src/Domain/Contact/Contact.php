@@ -30,10 +30,10 @@ final class Contact implements Normalizable
         ?string $phone
     ) {
         $this->externalId = $externalId;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
-        $this->phone = $phone;
+        $this->firstname  = $firstname;
+        $this->lastname   = $lastname;
+        $this->email      = $email;
+        $this->phone      = $phone;
     }
 
     public static function create(
@@ -92,12 +92,10 @@ final class Contact implements Normalizable
     {
         return [
             'externalId' => $this->externalId->toString(),
-            'firstname' => $this->firstname,
-            'lastname' => $this->lastname,
-            'email' => $this->email,
-            'phone' => $this->phone,
+            'firstname'  => $this->firstname,
+            'lastname'   => $this->lastname,
+            'email'      => $this->email,
+            'phone'      => $this->phone,
         ];
     }
 }
-
-

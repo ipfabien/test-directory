@@ -35,4 +35,8 @@ Thumbs.db
 ### Documentation ###
 /.doc/
 
+### Tools ###
+/.php-cs-fixer.cache
+
+
 

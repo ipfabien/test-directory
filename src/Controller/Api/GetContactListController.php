@@ -34,10 +34,10 @@ final class GetContactListController
 
         return new JsonResponse(
             [
-                'result' => $contacts->normalize(),
-                'count' => $contacts->count(),
+                'result'     => $contacts->normalize(),
+                'count'      => $contacts->count(),
                 'pagination' => [
-                    'page' => $pagination->page(),
+                    'page'    => $pagination->page(),
                     'perPage' => $pagination->perPage(),
                 ],
             ],
@@ -45,5 +45,3 @@ final class GetContactListController
         );
     }
 }
-
-
