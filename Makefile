@@ -12,7 +12,7 @@ MANAGER_ID ?= 11111111-1111-1111-1111-111111111111
 PAGE ?= 1
 PER_PAGE ?= 20
 
-.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list call-get-contact-manager call-get-manager-list call-get-manager cs-fix phpstan
+.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list call-get-contact-manager call-get-manager-list call-get-manager cs-fix phpstan phpunit
 
 up:
 	$(DOCKER_COMPOSE) up -d
@@ -60,3 +60,6 @@ cs-fix:
 
 phpstan:
 	$(DOCKER_COMPOSE) run --rm app php vendor/bin/phpstan analyse -c phpstan.neon
+
+phpunit:
+	$(DOCKER_COMPOSE) run --rm app php vendor/bin/phpunit
