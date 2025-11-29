@@ -11,10 +11,10 @@ Voici les étapes pour le faire tourner localement :
 
 3. **Préparer le fichier d'environnement**
 
-Un fichier `.env` est fourni et versionné pour simplifier l'onboarding :
+Un fichier `.env.exemple` est fourni et versionné pour simplifier l'onboarding :
 
 ```bash
-cp .env .env.local  # optionnel si vous voulez surcharger des valeurs en local
+cp .env.exemple .env 
 ```
 
 Les variables importantes déjà renseignées :
@@ -61,6 +61,8 @@ Quelques exemples :
 
 - Créer un contact :
 
+Phone et note sont optionnels, Email est unique.
+
 ```bash
 make call-create-contact \
   FIRSTNAME="John" \
@@ -85,11 +87,13 @@ make call-get-contact-manager CONTACT_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 
 - Lister les contacts avec filtre et pagination :
 
+Tout les paraètres sont optionnels.
+
 ```bash
 make call-get-contact-list FIRSTNAME= LASTNAME= EMAIL= PHONE= PAGE=1 PER_PAGE=10
 ```
 
-- Lister les managers :
+- Lister les managers (2 managers ont été injectés en migration):
 
 ```bash
 make call-get-manager-list

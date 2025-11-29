@@ -9,7 +9,11 @@ use App\Domain\Manager\ManagerRepository;
 use App\Domain\Shared\ExternalId;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/api/manager/{id}", name="api_get_manager", methods={"GET"})
+ */
 final class GetManagerController
 {
     private ManagerRepository $managerRepository;
@@ -34,7 +38,7 @@ final class GetManagerController
                 'manager'  => $manager->normalize(),
                 'contacts' => [
                     'result' => $contacts->normalize(),
-                    'count'  => \count($contacts),
+                    'count'  => $contacts->count(),
                 ],
             ],
             Response::HTTP_OK

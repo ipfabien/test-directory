@@ -7,7 +7,11 @@ namespace App\Controller\Api\Manager;
 use App\Domain\Manager\ManagerRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/api/managers", name="api_get_manager_list", methods={"GET"})
+ */
 final class GetManagerListController
 {
     private ManagerRepository $managerRepository;
@@ -24,7 +28,7 @@ final class GetManagerListController
         return new JsonResponse(
             [
                 'result' => $managers->normalize(),
-                'count'  => \count($managers),
+                'count'  => $managers->count(),
             ],
             Response::HTTP_OK
         );

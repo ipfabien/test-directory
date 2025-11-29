@@ -8,8 +8,12 @@ use App\Domain\Contact\ContactRepository;
 use App\Domain\Contact\CreateContact;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * @Route("/api/contact", name="api_create_contact", methods={"POST"})
+ */
 final class CreateContactController
 {
     private ContactRepository $contactRepository;
