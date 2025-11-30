@@ -55,7 +55,18 @@ make serve
 
 L’API sera alors disponible sur `http://localhost:8000`.
 
-8. **Appeler l’API avec les commandes `make`**
+8. **Ouvrir l’interface graphique des emails (Mailhog)**
+
+Les emails envoyés par l’application en environnement de développement sont capturés par Mailhog.  
+Pour ouvrir l’interface web de Mailhog dans votre navigateur :
+
+```bash
+make mailhog-ui
+```
+
+L’interface sera accessible sur `http://localhost:18025` et vous permettra de visualiser tous les emails envoyés par le micro service.
+
+9. **Appeler l’API avec les commandes `make`**
 
 Quelques exemples :
 

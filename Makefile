@@ -15,7 +15,7 @@ MANAGER_ID ?= 11111111-1111-1111-1111-111111111111
 PAGE ?= 1
 PER_PAGE ?= 20
 
-.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list call-get-contact-manager call-get-manager-list call-get-manager cs-fix phpstan phpunit
+.PHONY: up down build install update migrate serve call-create-contact call-get-contact call-get-contact-list call-get-contact-manager call-get-manager-list call-get-manager cs-fix phpstan phpunit mailhog-ui
 
 up:
 	$(DOCKER_COMPOSE) up -d
@@ -70,3 +70,6 @@ phpunit:
 
 jwt:
 	$(DOCKER_COMPOSE) run --rm app php bin/console app:jwt:generate-test-token
+
+mailhog-ui:
+	xdg-open http://localhost:18025 || sensible-browser http://localhost:18025 || x-www-browser http://localhost:18025 || echo "Ouvre http://localhost:18025 dans ton navigateur"

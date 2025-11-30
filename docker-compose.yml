@@ -32,6 +32,12 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  mailhog:
+    image: mailhog/mailhog
+    container_name: contacts_mailhog
+    ports:
+      - "18025:8025"
+
 volumes:
   pgdata:
 
