@@ -3,11 +3,12 @@ services:
     autowire: true
     autoconfigure: true
 
-  # Controllers as services
+  # Controllers as services (exclude DTO *Request classes).
   App\Controller\:
     resource: "../src/Controller/"
     public: true
     tags: ["controller.service_arguments"]
+    exclude: "../src/Controller/**/*Request.php"
 
   # Other services
   App\:
@@ -26,6 +27,12 @@ services:
 
   App\Domain\Manager\ManagerRepository: '@App\Services\Repository\Dbal\DBALManagerRepository'
 
+  # Event bus injection for the CreateContact controller.
+  App\Controller\Api\Contact\CreateContactController:
+    public: true
+    arguments:
+      $eventBus: "@messenger.default_bus"
+
   App\Services\Http\EventSubscriber\ExceptionSubscriber:
     tags:
       - { name: kernel.event_subscriber }
@@ -33,3 +40,6 @@ services:
   App\Services\Security\JwtTokenService:
     arguments:
       $secret: "%env(JWT_SECRET)%"
+
+  # Default email sender; tests override this via services_test.yaml.
+  App\Domain\Email\SendEmail: '@App\Services\Email\SymfonyMailerSendEmail'

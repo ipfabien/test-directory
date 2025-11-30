@@ -1,0 +1,4 @@
+framework:
+  mailer:
+    # In test environment, use the null transport so that no real emails are sent.
+    dsn: "null://null"

@@ -6,8 +6,10 @@ namespace App\Controller\Api\Contact;
 
 use App\Domain\Contact\ContactRepository;
 use App\Domain\Contact\CreateContact;
+use App\Message\Event\Contact\ContactCreated;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -20,10 +22,16 @@ final class CreateContactController
 
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(ContactRepository $contactRepository, UrlGeneratorInterface $urlGenerator)
-    {
+    private MessageBusInterface $eventBus;
+
+    public function __construct(
+        ContactRepository $contactRepository,
+        UrlGeneratorInterface $urlGenerator,
+        MessageBusInterface $eventBus
+    ) {
         $this->contactRepository = $contactRepository;
         $this->urlGenerator      = $urlGenerator;
+        $this->eventBus          = $eventBus;
     }
 
     public function __invoke(CreateContactRequest $request): JsonResponse
@@ -36,6 +44,15 @@ final class CreateContactController
                 $request->managerId(),
                 $request->phone(),
                 $request->note()
+            )
+        );
+
+        $this->eventBus->dispatch(
+            ContactCreated::create(
+                $externalId->toString(),
+                $request->firstname(),
+                $request->lastname(),
+                $request->email()
             )
         );
 

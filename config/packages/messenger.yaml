@@ -1,0 +1,27 @@
+framework:
+  messenger:
+    # We use a main bus dedicated to events.
+    # This is our "event bus" and it is also the default bus.
+    # default_bus expects the *name* of the bus, not the full service id.
+    default_bus: event_bus
+
+    transports:
+      async_events:
+        dsn: "doctrine://default?queue_name=event_bus"
+
+    buses:
+      # Bus dedicated to events (used for ContactCreated).
+      event_bus:
+        # We explicitly rebuild the middleware stack of the bus
+        # so that it is readable and fully controlled.
+        default_middleware: false
+        middleware:
+          # Avoid immediate recursion when a handler re-dispatches a message.
+          - dispatch_after_current_bus
+          # Send the message to the transport (Doctrine here) if it is routed.
+          - send_message
+          # Handle messages consumed by the worker (async) or not routed (sync).
+          - handle_message
+
+    routing:
+      'App\Message\Event\Contact\ContactCreated': async_events

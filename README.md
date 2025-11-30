@@ -55,7 +55,18 @@ make serve
 
 L’API sera alors disponible sur `http://localhost:8000`.
 
-8. **Ouvrir l’interface graphique des emails (Mailhog)**
+8. **Lancer le worker Messenger pour le traitement asynchrone**
+
+Les événements (par exemple l’envoi d’email après la création d’un contact) sont traités par un worker Messenger.  
+Dans un autre terminal, lancez :
+
+```bash
+make messenger-worker
+```
+
+Le worker consommera les messages en file d’attente sur le transport `async_events`.
+
+9. **Ouvrir l’interface graphique des emails (Mailhog)**
 
 Les emails envoyés par l’application en environnement de développement sont capturés par Mailhog.  
 Pour ouvrir l’interface web de Mailhog dans votre navigateur :
@@ -66,7 +77,7 @@ make mailhog-ui
 
 L’interface sera accessible sur `http://localhost:18025` et vous permettra de visualiser tous les emails envoyés par le micro service.
 
-9. **Appeler l’API avec les commandes `make`**
+10. **Appeler l’API avec les commandes `make`**
 
 Quelques exemples :
 
@@ -167,3 +178,11 @@ Le concept YAGNI est aussi bien respecté en faisant pas de over engineering mai
 Des tests ont été ajoutés ainsi que php-cs-fixer, phpstan level 7, une CI avec 3 jobs.
 
 Tout est bien sur discutable mais chaque choix est justifiable.
+
+## Ajout de Messenger
+
+Ajout de messenger afin de montrer son utilisation dans un cas concret. Il est principalement utiliser pour de l'asynchrone donc l'idée va être de créer un évènement lorsque l'on a créé un contact et qu'en le consommant de façon asynchrone (via doctrine dans notre cas pour cet usage simple) on va envoyer un email à l'administrateur.
+
+L'event est dispatch dans l'endpoint pour rester dans un cas d'architecture assez simple mais en réalité ce n'est pas sa responsabilité et on devrait le dispatch ailleurs.
+
+Pour tester si l'email a bien été envoyé j'ai listé plus haut une commande make pour lancer le worker et une commande make pour ouvrir l'interface graphique de MailHog afin de consulter les emails.

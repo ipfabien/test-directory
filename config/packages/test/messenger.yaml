@@ -1,0 +1,7 @@
+framework:
+  messenger:
+    transports:
+      # In test environment, use in-memory transport so messages are never persisted to database
+      async_events:
+        dsn: "in-memory://"
+
